@@ -2,12 +2,26 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     //manage state for videoList and videoPlayer
       //set default click state of any
         //App instance/children to be false
+      //make a handler for videoListEntry
+    this.state = {
+      //VPD will pass data to the list (who will then pass to the player)
+        //and will update with new data inputs
+          //this state value will get updated with fetch requests
+
+      //state that keeps track of videos in video list
+        //potentially, input to search will update this state, which will update videolistview
+      videoListData: this.props.videos,
+      targetVideo: this.props.videos[0]
+    };
   }
-  //make a handler for videoListEntry
+  //this passes clicked video to the App state
+  handleVideoClick(clickedVideo) {
+    console.log('clicked!');
+    this.setState({targetVideo: clickedVideo});
+  }
 
   render() {
     return (
@@ -19,11 +33,14 @@ class App extends React.Component {
         </nav>
         <div className="row">
           <div className="col-md-7">
-            <div><VideoPlayer video={this.props.videos[0]} /></div>
+            {/*<div><VideoPlayer video={this.props.videos[0]} /></div>*/}
+            <div><VideoPlayer video={this.state.targetVideo} /></div>
           </div>
           <div className="col-md-5">
             <div>
-              <VideoList videos={this.props.videos} />
+              {/*<VideoList videos={this.props.videos} />*/}
+
+              <VideoList videos={this.state.videoListData} handleVideoClick={this.handleVideoClick.bind(this)} />
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ var VideoList = (props) => (
     {
       props.videos.map((video, i) => {
         return (
-          <VideoListEntry video={video} />
+          <VideoListEntry video={video} key={i} />
         );
       })
     }

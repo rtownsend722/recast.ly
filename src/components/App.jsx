@@ -13,10 +13,32 @@ class App extends React.Component {
 
       //state that keeps track of videos in video list
         //potentially, input to search will update this state, which will update videolistview
-      videoListData: this.props.videos,
-      targetVideo: this.props.videos[0]
+      // videoListData: this.props.videos,
+      // targetVideo: this.props.videos[0]
+      videos: [],
+      targetVideo: window.exampleVideoData[0]
     };
   }
+
+  componentDidMount() {
+    console.log(this.props);
+    this.getYouTubeVideos('bunny');
+  }
+
+  getYouTubeVideos(query) {
+    var options = {
+      key: this.props.API_KEY,
+      query: query
+    };
+
+    this.props.searchYouTube(options, (videos) =>
+      this.setState({
+        videos: videos,
+        targetVideo: videos[0]
+      })
+    );
+  }
+
   //this passes clicked video to the App state
   handleVideoClick(event) {
     this.setState({targetVideo: event});
@@ -27,7 +49,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div><h5><em>search</em> view goes here</h5></div>
+            <Search handleInput={this.getYouTubeVideos.bind(this)} />
           </div>
         </nav>
         <div className="row">
@@ -39,7 +61,7 @@ class App extends React.Component {
             <div>
               {/*<VideoList videos={this.props.videos} />*/}
 
-              <VideoList videos={this.state.videoListData} handleVideoClick={(video) => this.handleVideoClick(video)} />
+              <VideoList videos={this.state.videos} handleVideoClick={(video) => this.handleVideoClick(video)} />
             </div>
           </div>
         </div>

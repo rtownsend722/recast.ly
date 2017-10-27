@@ -1,15 +1,23 @@
-var searchYouTube = (query, callback) => {
-  $.ajax({
-    url: 'https://www.googleapis.com/youtube/v3/search',
-    data: { 
-      q: 'cool cats',
-      max: 5,
-      key: window.YOUTUBE_API_KEY
-    },
-    success: function(data) {
-      console.log('success!');
-    },
-    type: ''
+var searchYouTube = ({key, query, max = 5}, callback) => {
+  //options: object that passes query max, key
+  //callback: happens upon succesful GET
+  $.get('https://www.googleapis.com/youtube/v3/search', {
+    part: 'snippet',
+    key: key,
+    q: query,
+    maxResults: max,
+    type: 'video',
+    videoEmbeddable: 'true'
+  })
+  .done(({items}) => {
+    if (callback) {
+      callback(items);
+    }  
+  })
+  .fail(({responseJSON}) => {
+    responseJSON.error.errors.forEach((err) =>
+      console.error(err)
+    );
   });
 };
 
